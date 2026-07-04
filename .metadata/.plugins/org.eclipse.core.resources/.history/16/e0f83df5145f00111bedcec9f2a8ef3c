@@ -1,0 +1,110 @@
+package com.example.demo;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.*;
+import java.util.regex.*;
+
+public class PdfToExcelConverter {
+
+    public static void main(String[] args) {
+
+        String pdfPath = "S13_S1303_20_1_ELECTORS_NOT_MAPPED.pdf";
+        String excelPath = "Electors_Not_Mapped.xlsx";
+
+        try {
+
+            // Read PDF
+            PDDocument document = Loader.loadPDF(new File(pdfPath));
+
+            PDFTextStripper stripper = new PDFTextStripper();
+            String text = stripper.getText(document);
+
+            document.close();
+
+            // Create Workbook
+            Workbook workbook = new XSSFWorkbook();
+
+            // Required Sheet Name
+            Sheet sheet = workbook.createSheet(
+                    "236_81_ELECTORS_NOT_MAPPED");
+
+            // Header Row
+            Row header = sheet.createRow(0);
+
+            header.createCell(0).setCellValue("Part");
+            header.createCell(1).setCellValue("EPIC Number");
+            header.createCell(2).setCellValue("Elector Name");
+            header.createCell(3).setCellValue("Current Relative Name");
+            header.createCell(4).setCellValue("Relation Type");
+
+            int rowNum = 1;
+
+            /*
+             * Example row:
+             * 3 WKK4364683 PAVAN RAJENDRA CHAUDHARI
+             * RAJENDRA CHAUDHARI Father
+             */
+
+            Pattern pattern = Pattern.compile(
+                    "(\\d+)\\s+" +                       // Part
+                    "([A-Z]{3}\\d+)\\s+" +              // EPIC
+                    "(.+?)\\s+" +                       // Elector Name
+                    "([A-Z ]+?)\\s+" +                  // Relative Name
+                    "(Father|Husband|Mother|Other)"     // Relation
+            );
+
+            String[] lines = text.split("\\r?\\n");
+
+            for (String line : lines) {
+
+                Matcher matcher = pattern.matcher(line.trim());
+
+                if (matcher.find()) {
+
+                    Row row = sheet.createRow(rowNum++);
+
+                    row.createCell(0)
+                            .setCellValue(matcher.group(1));
+
+                    row.createCell(1)
+                            .setCellValue(matcher.group(2));
+
+                    row.createCell(2)
+                            .setCellValue(matcher.group(3));
+
+                    row.createCell(3)
+                            .setCellValue(matcher.group(4));
+
+                    row.createCell(4)
+                            .setCellValue(matcher.group(5));
+                }
+            }
+
+            // Auto-size columns
+            for (int i = 0; i < 5; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            // Save Excel
+            FileOutputStream fos =
+                    new FileOutputStream(excelPath);
+
+            workbook.write(fos);
+
+            fos.close();
+            workbook.close();
+
+            System.out.println(
+                    "Excel file created successfully: "
+                    + excelPath);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

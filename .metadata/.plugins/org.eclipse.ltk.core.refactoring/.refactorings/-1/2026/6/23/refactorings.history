@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;com.example.demo.ExceltoPdf&apos; to &apos;PdfToExcelConverter&apos;&#x0D;&#x0A;- Original project: &apos;-1&apos;&#x0D;&#x0A;- Original element: &apos;com.example.demo.ExceltoPdf&apos;&#x0D;&#x0A;- Renamed element: &apos;com.example.demo.PdfToExcelConverter&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;ExceltoPdf&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.example.demo{ExceltoPdf.java[ExceltoPdf" matchStrategy="1" name="PdfToExcelConverter" qualified="false" references="true" similarDeclarations="false" stamp="1780467857404" textual="false" version="1.0"/>
+</session>
