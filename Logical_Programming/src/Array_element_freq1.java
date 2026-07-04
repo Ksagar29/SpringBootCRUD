@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class Array_element_freq1 {
+public class Array_element_freq1 {  
 
 	public static void main(String[] args) {
 
